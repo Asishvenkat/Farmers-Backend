@@ -13,8 +13,19 @@ const razorpayRoute = require('./routes/razorpay'); // ✅ Add this line
 
 
 // ✅ Enable CORS middleware BEFORE your routes
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://farmers-frontend.vercel.app"
+];
+
 app.use(cors({
-  origin: "http://localhost:5173", // or "*" to allow all origins temporarily
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true
 }));
 
